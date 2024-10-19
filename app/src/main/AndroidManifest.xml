@@ -4,6 +4,8 @@
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
 
     <application
         android:allowBackup="true"
@@ -24,6 +26,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- Khai báo TrafficSignActivity -->
+        <activity
+            android:name=".TrafficSignActivity"
+            android:exported="true" />
     </application>
 
 </manifest>

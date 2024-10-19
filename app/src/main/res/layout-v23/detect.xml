@@ -112,10 +112,9 @@
                         android:id="@+id/bien_bao_cam_linear"
                         android:orientation="vertical"
                         android:foreground="?attr/selectableItemBackgroundBorderless"
-
                         android:gravity="center"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_margin="8dp">
 
                         <ImageView
@@ -127,7 +126,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Biển báo\ncấm"
+                            android:text="Biển báo cấm"
                             android:textSize="14sp"
                             android:gravity="center" />
                     </LinearLayout>
@@ -135,8 +134,8 @@
                     <LinearLayout
                         android:orientation="vertical"
                         android:gravity="center"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_margin="8dp">
 
                         <ImageView
@@ -148,7 +147,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Biển\ncảnh báo"
+                            android:text="Biển cảnh báo"
                             android:textSize="14sp"
                             android:gravity="center" />
                     </LinearLayout>
@@ -156,8 +155,8 @@
                     <LinearLayout
                         android:orientation="vertical"
                         android:gravity="center"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_margin="8dp">
 
                         <ImageView
@@ -169,7 +168,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Biển\nhiệu lệnh"
+                            android:text="Biển hiệu lệnh"
                             android:textSize="14sp"
                             android:gravity="center" />
                     </LinearLayout>
@@ -177,8 +176,8 @@
                     <LinearLayout
                         android:orientation="vertical"
                         android:gravity="center"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_margin="8dp">
 
                         <ImageView
@@ -190,7 +189,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Biển\nphụ"
+                            android:text="Biển phụ"
                             android:textSize="14sp"
                             android:gravity="center" />
                     </LinearLayout>
@@ -198,8 +197,8 @@
                     <LinearLayout
                         android:orientation="vertical"
                         android:gravity="center"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_margin="8dp">
 
                         <ImageView
@@ -211,7 +210,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Biển\nchỉ dẫn"
+                            android:text="Biển chỉ dẫn"
                             android:textSize="14sp"
                             android:gravity="center" />
                     </LinearLayout>
@@ -310,7 +309,6 @@
         android:id="@+id/buttonDetect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:layout_margin="10dp"
         android:layout_marginTop="15dp"
         app:layout_constraintBottom_toBottomOf="parent"

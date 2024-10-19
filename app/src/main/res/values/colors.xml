@@ -5,5 +5,7 @@
     <color name="bounding_box_color">#234567</color>
     <color name="button_color">#3D5AFE</color>
     <color name="background_color">#121212</color>
+    <color name="default_button_color">#eacdbb</color>
+    <color name="selected_button_color">#cb936f</color>
 
 </resources>

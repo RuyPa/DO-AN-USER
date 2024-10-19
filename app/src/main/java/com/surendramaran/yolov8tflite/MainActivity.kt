@@ -178,14 +178,20 @@
 package com.surendramaran.yolov8tflite
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Matrix
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.View
+import android.view.WindowInsets
+import android.view.WindowInsetsController
 import android.widget.HorizontalScrollView
+import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -223,14 +229,33 @@ class MainActivity : AppCompatActivity(), Detector.DetectorListener {
     private val scrollStep = 5 // Cuộn 5 pixel mỗi bước
     private val scrollInterval = 10L // Thực hiện cuộn sau mỗi 10ms
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         // Load giao diện detect.xml đầu tiên khi ứng dụng khởi động
         setContentView(R.layout.detect)
 
+        // Make the app fullscreen
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.insetsController?.apply {
+                hide(WindowInsets.Type.statusBars())
+                systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            }
+        } else {
+            @Suppress("DEPRECATION")
+            window.decorView.systemUiVisibility = (
+                    View.SYSTEM_UI_FLAG_FULLSCREEN
+                            or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                    )
+        }
+
         horizontalScrollView = findViewById(R.id.horizontalScrollView)
         categoryLayout = findViewById(R.id.categories_layout)
+
 
 
         startInfiniteScroll()
@@ -238,6 +263,15 @@ class MainActivity : AppCompatActivity(), Detector.DetectorListener {
 
         // Nút để bắt đầu camera
         val detectButton = findViewById<com.google.android.material.floatingactionbutton.FloatingActionButton>(R.id.buttonDetect)
+
+        val bienBaoCamLayout = findViewById<LinearLayout>(R.id.bien_bao_cam_linear)
+
+        // Đặt sự kiện click cho LinearLayout
+        bienBaoCamLayout.setOnClickListener {
+            // Khởi động TrafficSignActivity khi bấm vào
+            val intent = Intent(this, TrafficSignActivity::class.java)
+            startActivity(intent)
+        }
 
         // Khi bấm nút, chuyển sang giao diện camera và khởi động chức năng chính
         detectButton.setOnClickListener {
@@ -304,6 +338,13 @@ class MainActivity : AppCompatActivity(), Detector.DetectorListener {
         } else {
             ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
         }
+
+        val backIcon = findViewById<ImageView>(R.id.back_icon)
+        backIcon.setOnClickListener {
+            finish()
+        }
+
+
 
         cameraExecutor = Executors.newSingleThreadExecutor()
     }
