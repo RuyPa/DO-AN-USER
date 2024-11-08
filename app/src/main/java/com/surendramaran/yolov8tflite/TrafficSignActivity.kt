@@ -8,11 +8,13 @@ import android.view.WindowInsets
 import android.view.WindowInsetsController
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.surendramaran.yolov8tflite.adapter.TrafficSignAdapter
 import com.surendramaran.yolov8tflite.model.TrafficSign
 
@@ -116,12 +118,53 @@ class TrafficSignActivity : AppCompatActivity() {
     }
 
     private fun loadTrafficSignList(trafficSignList: List<TrafficSign>) {
-        trafficSignAdapter = TrafficSignAdapter(trafficSignList) { trafficSign ->
-            // Handle click events here, e.g., show a Toast with the traffic sign name
-            Toast.makeText(this, "Clicked: ${trafficSign.name}", Toast.LENGTH_SHORT).show()
+        if (!::trafficSignAdapter.isInitialized) {
+            // Khởi tạo Adapter nếu chưa được khởi tạo
+            trafficSignAdapter = TrafficSignAdapter(trafficSignList) { trafficSign ->
+                showTrafficSignPopup(trafficSign) // Hiển thị popup khi nhấn vào mục
+            }
+            recyclerView.adapter = trafficSignAdapter
+        } else {
+            // Cập nhật dữ liệu nếu Adapter đã được khởi tạo
+            trafficSignAdapter.updateData(trafficSignList)
         }
-        recyclerView.adapter = trafficSignAdapter
+
+        // Cuộn về đầu danh sách
+        recyclerView.scrollToPosition(0)
     }
+    private fun showTrafficSignPopup(trafficSign: TrafficSign) {
+        // Inflate layout custom dialog
+        val dialogView = layoutInflater.inflate(R.layout.dialog_traffic_sign, null)
+
+        // Ánh xạ các view trong layout
+        val signName: TextView = dialogView.findViewById(R.id.dialog_sign_name)
+        val signImage: ImageView = dialogView.findViewById(R.id.dialog_sign_image)
+        val signDescription: TextView = dialogView.findViewById(R.id.dialog_sign_description)
+        val closeButton: Button = dialogView.findViewById(R.id.dialog_close_button)
+
+        // Gán dữ liệu
+        signName.text = trafficSign.name
+        signDescription.text = trafficSign.description
+        Glide.with(this)
+            .load(trafficSign.imagePath)
+            .into(signImage)
+
+        // Tạo AlertDialog với layout tùy chỉnh
+        val dialog = androidx.appcompat.app.AlertDialog.Builder(this)
+            .setView(dialogView)
+            .create()
+
+        // Xử lý sự kiện cho nút Đóng
+        closeButton.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+
+
+
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun highlightSelectedButton(selectedButton: Button) {
@@ -136,24 +179,24 @@ class TrafficSignActivity : AppCompatActivity() {
     // Danh sách biển báo cấm
     private fun getProhibitedSigns(): List<TrafficSign> {
         return listOf(
-            TrafficSign("Stop Sign", "001", "A sign indicating vehicles must stop", "https://thumbs.dreamstime.com/b/cartoon-bodyguard-stop-cartoon-illustration-bodyguard-holding-up-stop-sign-135524686.jpg"),
-            TrafficSign("No Entry", "002", "A sign indicating no entry", "https://files.oaiusercontent.com/file-qnNf626TzmPTbLq1VZZ8UCOI?se=2024-10-19T13%3A26%3A01Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D604800%2C%20immutable%2C%20private&rscd=attachment%3B%20filename%3D74891ffe-e07e-41ee-b34b-a07ed5e74399.webp&sig=Uo0ZAheBzVF4LCjw9d/nfuL8nt5tnFuacMeQnHqAht4%3D")
+            TrafficSign(1,"Stop Sign", "001", "A sign indicating vehicles must stop", "https://thumbs.dreamstime.com/b/cartoon-bodyguard-stop-cartoon-illustration-bodyguard-holding-up-stop-sign-135524686.jpg"),
+            TrafficSign(2,"No Entry", "002", "A sign indicating no entry", "https://files.oaiusercontent.com/file-qnNf626TzmPTbLq1VZZ8UCOI?se=2024-10-19T13%3A26%3A01Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D604800%2C%20immutable%2C%20private&rscd=attachment%3B%20filename%3D74891ffe-e07e-41ee-b34b-a07ed5e74399.webp&sig=Uo0ZAheBzVF4LCjw9d/nfuL8nt5tnFuacMeQnHqAht4%3D")
         )
     }
 
     // Danh sách biển chỉ dẫn
     private fun getGuideSigns(): List<TrafficSign> {
         return listOf(
-            TrafficSign("Go Ahead", "101", "A guide sign", "https://hondamydinh.com.vn/wp-content/uploads/2021/07/Logo-bie%CC%82%CC%89n-ba%CC%81o-chi%CC%89-da%CC%82%CC%83n.jpeg"),
-            TrafficSign("Car Go Ahead", "102", "Another guide sign", "https://daotaolaixehd.com.vn/wp-content/uploads/2016/12/bien-chi-dan-412b.png")
+            TrafficSign(3,"Go Ahead", "101", "A guide sign", "https://hondamydinh.com.vn/wp-content/uploads/2021/07/Logo-bie%CC%82%CC%89n-ba%CC%81o-chi%CC%89-da%CC%82%CC%83n.jpeg"),
+            TrafficSign(4,"Car Go Ahead", "102", "Another guide sign", "https://daotaolaixehd.com.vn/wp-content/uploads/2016/12/bien-chi-dan-412b.png")
         )
     }
 
     // Danh sách biển nguy hiểm
     private fun getWarningSigns(): List<TrafficSign> {
         return listOf(
-            TrafficSign("No Cross", "201", "A warning sign", "https://trungtamthanhcong.net/wp-content/uploads/2015/07/w.225.jpg"),
-            TrafficSign("Another Warning", "202", "Another warning sign", "https://bienbaocongtrinh.com/thumb1/500x500/2/upload/thuoctinh/bienbaogiao-thongnguyhiem610-12-5692.jpg")
+            TrafficSign(5,"No Cross", "201", "A warning sign", "https://trungtamthanhcong.net/wp-content/uploads/2015/07/w.225.jpg"),
+            TrafficSign(6,"Another Warning", "202", "Another warning sign", "https://bienbaocongtrinh.com/thumb1/500x500/2/upload/thuoctinh/bienbaogiao-thongnguyhiem610-12-5692.jpg")
         )
     }
 }

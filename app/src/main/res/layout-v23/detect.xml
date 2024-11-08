@@ -7,71 +7,16 @@
     tools:context=".MainActivity">
 
     <!-- Image section -->
-    <ImageView
-        android:id="@+id/illustrationimage"
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/bg1"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Header section with logo, search, and cart icons -->
-    <LinearLayout
-        android:id="@+id/header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        android:gravity="center_vertical">
 
-        <!-- Logo -->
-        <ImageView
-            android:id="@+id/logo"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/logo" />
-
-        <TextView
-            android:id="@+id/app_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ETS"
-            android:textSize="20sp"
-            android:layout_marginStart="8dp"
-            android:textStyle="bold" />
-
-        <ImageView
-            android:id="@+id/search_icon_fake"
-            android:layout_width="300dp"
-            android:layout_height="52dp"
-            android:layout_gravity="end"
-            android:layout_weight="1"
-            android:visibility="invisible"
-            android:src="@drawable/ic_search" />
-
-        <!-- Search icon -->
-        <ImageView
-            android:id="@+id/search_icon"
-            android:layout_width="130dp"
-            android:layout_height="52dp"
-            android:layout_gravity="end"
-            android:layout_weight="1"
-            android:src="@drawable/ic_search" />
-
-        <ImageView
-            android:id="@+id/cart_icon"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_config" />
-    </LinearLayout>
 
     <!-- Phần cuộn chính -->
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="-30dp"
         app:layout_constraintTop_toBottomOf="@id/illustrationimage"
         app:layout_constraintBottom_toTopOf="@id/footer"
         app:layout_constraintStart_toStartOf="parent"
@@ -239,6 +184,52 @@
                 android:backgroundTint="#FFFFFF">
 
                 <Button
+                    android:id="@+id/detect_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:text="Nhận diện biển báo trong ảnh"
+                    android:textColor="#000000"
+                    android:backgroundTint="#2196F3"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:elevation="4dp"
+                    android:layout_margin="8dp"
+                    android:background="?attr/selectableItemBackground"/>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="6dp"
+                android:backgroundTint="#FFFFFF">
+
+                <Button
+                    android:id="@+id/dectect_video"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:text="Nhận diện biển báo trong video"
+                    android:textColor="#000000"
+                    android:backgroundTint="#2196F3"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:elevation="4dp"
+                    android:layout_margin="8dp"
+                    android:background="?attr/selectableItemBackground"/>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="6dp"
+                android:backgroundTint="#FFFFFF">
+
+                <Button
                     android:id="@+id/learn_about_signs"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -303,6 +294,65 @@
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+    <ImageView
+        android:id="@+id/illustrationimage"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg1"
+        android:background="@android:color/transparent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+    <LinearLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical">
+
+        <!-- Logo -->
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/logo" />
+
+        <TextView
+            android:id="@+id/app_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ETS"
+            android:textSize="20sp"
+            android:layout_marginStart="8dp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/search_icon_fake"
+            android:layout_width="300dp"
+            android:layout_height="52dp"
+            android:layout_gravity="end"
+            android:layout_weight="1"
+            android:visibility="invisible"
+            android:src="@drawable/ic_search" />
+
+        <!-- Search icon -->
+        <ImageView
+            android:id="@+id/search_icon"
+            android:layout_width="130dp"
+            android:layout_height="52dp"
+            android:layout_gravity="end"
+            android:layout_weight="1"
+            android:src="@drawable/ic_search" />
+
+        <ImageView
+            android:id="@+id/cart_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_config" />
+    </LinearLayout>
+
 
     <!-- Floating button for Detect functionality -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton

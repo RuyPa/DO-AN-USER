@@ -1,0 +1,13 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@android:color/transparent" />
+
+    <stroke
+        android:width="1dp"
+        android:color="#DDDDDD" /> <!-- Màu đường viền (nhạt) -->
+
+    <padding
+        android:bottom="1dp" /> <!-- Khoảng cách để đường viền sát cạnh dưới -->
+
+    <size
+        android:height="1dp" /> <!-- Độ dày đường viền -->
+</shape>

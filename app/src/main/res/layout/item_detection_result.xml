@@ -1,0 +1,36 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:background="@drawable/border_bottom">
+
+    <!-- Số thứ tự -->
+    <TextView
+        android:id="@+id/tvSerialNumber"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="#000000"
+        android:textSize="14sp" />
+
+    <!-- Tên biển báo -->
+    <TextView
+        android:id="@+id/tvSignName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        android:paddingStart="8dp" />
+
+    <!-- Hình ảnh biển báo -->
+    <ImageView
+        android:id="@+id/imgSign"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:scaleType="centerCrop"
+        android:layout_marginStart="8dp" />
+</LinearLayout>

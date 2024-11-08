@@ -1,0 +1,160 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff">
+
+
+
+    <ImageView
+        android:id="@+id/illustrationimage"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/detect_img" />
+    <!-- Phần tiêu đề ở trên -->
+    <LinearLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Back button -->
+        <ImageView
+            android:id="@+id/back_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_back"
+            android:tint="#FFFFFF" />
+    </LinearLayout>
+    <!-- Title -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Nhận diện biển báo trong ảnh"
+        android:textColor="@color/primary_text_color"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginTop="130dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+
+        <LinearLayout
+            android:id="@+id/iddetect"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@id/illustrationimage"
+            android:background="@color/white">
+
+
+
+
+
+            <!-- Button to select image -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSelectImage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="#d0aa91"
+                android:text="Chọn ảnh từ thư viện"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/button_text_color"
+                android:textSize="20dp"
+                app:cornerRadius="12dp" />
+
+            <!-- FrameLayout for image and overlay -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardViewImage"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="@color/card_background"
+                android:visibility="gone"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <!-- ImageView hiển thị ảnh -->
+                    <ImageView
+                        android:id="@+id/imageView"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitCenter"
+                        android:background="@color/image_background" />
+
+                    <!-- OverlayView để vẽ bounding boxes -->
+                    <com.surendramaran.yolov8tflite.OverlayView
+                        android:id="@+id/overlayView"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="20dp"
+                        android:layout_height="match_parent" />
+                </FrameLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Button group -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:orientation="horizontal">
+
+                <!-- Button for recognition -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnRecognize"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#cb936f"
+                    android:text="Nhận diện"
+                    android:visibility="gone"
+                    android:textColor="@color/button_text_color"
+                    app:cornerRadius="12dp" />
+
+                <!-- Button for download -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnDownload"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/download_button_color"
+                    android:text="Download"
+                    android:visibility="gone"
+                    android:textColor="@color/button_text_color"
+                    app:cornerRadius="12dp" />
+            </LinearLayout>
+
+            <!-- RecyclerView để hiển thị kết quả nhận diện -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/detectionResultTable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:visibility="gone"
+                android:padding="8dp"
+                android:background="#F9F9F9"
+                android:nestedScrollingEnabled="false"
+                android:scrollbars="vertical"
+                android:layout_marginBottom="150dp" />
+        </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

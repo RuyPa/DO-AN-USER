@@ -1,0 +1,51 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/dialog_background">
+
+    <!-- Tiêu đề của biển báo -->
+    <TextView
+        android:id="@+id/dialog_sign_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Traffic Sign Name"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_gravity="center"
+        android:paddingBottom="8dp" />
+
+    <ImageView
+        android:id="@+id/dialog_sign_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:layout_gravity="center"
+        android:paddingBottom="8dp" />
+
+
+    <!-- Mô tả của biển báo -->
+    <TextView
+        android:id="@+id/dialog_sign_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text="Traffic Sign Description"
+        android:textSize="16sp"
+        android:paddingBottom="16dp" />
+
+    <!-- Nút đóng -->
+    <Button
+        android:id="@+id/dialog_close_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Đóng"
+        android:textColor="@color/white"
+        android:backgroundTint="#cb936f"
+
+        android:layout_gravity="center" />
+</LinearLayout>

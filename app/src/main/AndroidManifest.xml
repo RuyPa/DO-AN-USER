@@ -5,6 +5,8 @@
     <uses-feature android:name="android.hardware.camera" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
 
     <application
@@ -29,6 +31,9 @@
         <!-- Khai báo TrafficSignActivity -->
         <activity
             android:name=".TrafficSignActivity"
+            android:exported="true" />
+        <activity
+            android:name=".DetectImage"
             android:exported="true" />
     </application>
 

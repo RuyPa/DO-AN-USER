@@ -7,5 +7,9 @@
     <color name="background_color">#121212</color>
     <color name="default_button_color">#eacdbb</color>
     <color name="selected_button_color">#cb936f</color>
-
+    <color name="primary_text_color">#212121</color>
+    <color name="button_text_color">#FFFFFF</color>
+    <color name="card_background">#FFFFFF</color>
+    <color name="image_background">#DDDDDD</color>
+    <color name="download_button_color">#4CAF50</color>
 </resources>

@@ -11,47 +11,41 @@ import com.surendramaran.yolov8tflite.R
 import com.surendramaran.yolov8tflite.model.TrafficSign
 
 class TrafficSignAdapter(
-    private val trafficSignList: List<TrafficSign>,  // Danh sách các biển báo giao thông
-    private val onItemClick: (TrafficSign) -> Unit   // Callback khi click vào item
+    private var items: List<TrafficSign>,
+    private val onItemClick: (TrafficSign) -> Unit // Callback khi nhấn vào mục
 ) : RecyclerView.Adapter<TrafficSignAdapter.TrafficSignViewHolder>() {
-
-    // ViewHolder class để giữ các view cho từng item
-    class TrafficSignViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val signName: TextView = itemView.findViewById(R.id.sign_name)
-        val signCode: TextView = itemView.findViewById(R.id.sign_code)
-        val signDescription: TextView = itemView.findViewById(R.id.sign_description)
-        val signImage: ImageView = itemView.findViewById(R.id.sign_image)
-
-        // Gán dữ liệu cho ViewHolder
-        fun bind(trafficSign: TrafficSign, onItemClick: (TrafficSign) -> Unit) {
-            signName.text = trafficSign.name
-            signCode.text = "Mã: ${trafficSign.code}"  // Hiển thị mã biển báo
-            signDescription.text = trafficSign.description
-
-            // Sử dụng Glide để load ảnh từ đường dẫn
-            Glide.with(itemView.context)
-                .load(trafficSign.imagePath)
-                .into(signImage)
-
-            // Xử lý sự kiện click vào item
-            itemView.setOnClickListener {
-                onItemClick(trafficSign)
-            }
-        }
+    class TrafficSignViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val name: TextView = view.findViewById(R.id.sign_name)
+        val stt: TextView = view.findViewById(R.id.sign_stt)
+        val image: ImageView = view.findViewById(R.id.sign_image)
     }
 
-    // Tạo ViewHolder từ layout item
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrafficSignViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.traffic_sign_item, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.traffic_sign_item, parent, false)
         return TrafficSignViewHolder(view)
     }
 
-    // Gán dữ liệu cho ViewHolder
     override fun onBindViewHolder(holder: TrafficSignViewHolder, position: Int) {
-        val trafficSign = trafficSignList[position]
-        holder.bind(trafficSign, onItemClick)
+        val trafficSign = items[position]
+        holder.stt.text = "STT: ${position + 1}"  // Hiển thị STT
+        holder.name.text = trafficSign.name       // Hiển thị tên biển báo
+
+        Glide.with(holder.image.context)
+            .load(trafficSign.imagePath)         // Tải hình ảnh từ URL
+            .into(holder.image)
+
+        // Gọi callback khi nhấn vào item
+        holder.itemView.setOnClickListener {
+            onItemClick(trafficSign)
+        }
     }
 
-    // Trả về số lượng biển báo trong danh sách
-    override fun getItemCount(): Int = trafficSignList.size
+    override fun getItemCount(): Int = items.size
+
+    // Thêm hàm cập nhật dữ liệu nếu danh sách thay đổi
+    fun updateData(newItems: List<TrafficSign>) {
+        items = newItems
+        notifyDataSetChanged()
+    }
 }

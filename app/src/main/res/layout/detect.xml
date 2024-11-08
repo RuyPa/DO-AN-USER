@@ -240,6 +240,53 @@
                 android:backgroundTint="#FFFFFF">
 
                 <Button
+                    android:id="@+id/detect_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:text="Nhận diện biển báo trong ảnh"
+                    android:textColor="#000000"
+                    android:backgroundTint="#2196F3"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:elevation="4dp"
+                    android:layout_margin="8dp"
+                    android:background="?attr/selectableItemBackground"/>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="6dp"
+                android:backgroundTint="#FFFFFF">
+
+                <Button
+                    android:id="@+id/dectect_video"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:text="Nhận diện biển báo trong video"
+                    android:textColor="#000000"
+                    android:backgroundTint="#2196F3"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:elevation="4dp"
+                    android:layout_margin="8dp"
+                    android:background="?attr/selectableItemBackground"/>
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="6dp"
+                android:backgroundTint="#FFFFFF">
+
+                <Button
                     android:id="@+id/learn_about_signs"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -278,29 +325,6 @@
                     android:background="?attr/selectableItemBackground"/>
             </androidx.cardview.widget.CardView>
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="12dp"
-                android:layout_marginBottom="16dp"
-
-                app:cardElevation="6dp"
-                android:backgroundTint="#FFFFFF">
-
-                <Button
-                    android:id="@+id/thi_bang_lai"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:text="Biển báo trong các bài thi bằng lái"
-                    android:textColor="#000000"
-                    android:backgroundTint="#4CAF50"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:elevation="4dp"
-                    android:layout_margin="8dp"
-                    android:background="?attr/selectableItemBackground"/>
-            </androidx.cardview.widget.CardView>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
