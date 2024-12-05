@@ -92,6 +92,15 @@ class MainActivity : AppCompatActivity(), Detector.DetectorListener {
             startActivity(intent)
         }
 
+        val detectVideoButton: Button = findViewById(R.id.dectect_video)
+
+        // Xử lý sự kiện khi bấm nút
+        detectVideoButton.setOnClickListener {
+            // Mở giao diện DetectImage
+            val intent = Intent(this, DetectVideo::class.java)
+            startActivity(intent)
+        }
+
 
         startInfiniteScroll()
 

@@ -35,6 +35,9 @@
         <activity
             android:name=".DetectImage"
             android:exported="true" />
+        <activity
+            android:name=".DetectVideo"
+            android:exported="true" />
     </application>
 
 </manifest>

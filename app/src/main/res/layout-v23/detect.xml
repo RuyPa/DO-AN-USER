@@ -33,6 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Danh Mục"
+                android:textColor="@color/black"
                 android:textStyle="bold"
                 android:textSize="18sp"
                 android:layout_marginTop="10dp"
@@ -172,6 +173,7 @@
                 android:text="Chức Năng Khác"
                 android:textStyle="bold"
                 android:textSize="18sp"
+                android:textColor="@color/black"
                 android:layout_marginTop="16dp"
                 android:padding="16dp" />
 
@@ -189,13 +191,13 @@
                     android:layout_height="wrap_content"
                     android:padding="16dp"
                     android:text="Nhận diện biển báo trong ảnh"
-                    android:textColor="#000000"
-                    android:backgroundTint="#2196F3"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:elevation="4dp"
-                    android:layout_margin="8dp"
-                    android:background="?attr/selectableItemBackground"/>
+                    android:textColor="#ccc7cd"
+                android:backgroundTint="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:elevation="4dp"
+                android:layout_margin="8dp"
+                    />
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
@@ -212,7 +214,7 @@
                     android:layout_height="wrap_content"
                     android:padding="16dp"
                     android:text="Nhận diện biển báo trong video"
-                    android:textColor="#000000"
+                    android:textColor="#ccc7cd"
                     android:backgroundTint="#2196F3"
                     android:textSize="18sp"
                     android:textStyle="bold"
@@ -235,7 +237,7 @@
                     android:layout_height="wrap_content"
                     android:padding="16dp"
                     android:text="Học về biển báo"
-                    android:textColor="#000000"
+                    android:textColor="#ccc7cd"
                     android:backgroundTint="#2196F3"
                     android:textSize="18sp"
                     android:textStyle="bold"
@@ -259,7 +261,7 @@
                     android:layout_height="wrap_content"
                     android:padding="16dp"
                     android:text="Kiểm tra kiến thức của bạn"
-                    android:textColor="#000000"
+                    android:textColor="#ccc7cd"
                     android:backgroundTint="#4CAF50"
                     android:textSize="18sp"
                     android:textStyle="bold"
@@ -283,7 +285,7 @@
                     android:layout_height="wrap_content"
                     android:padding="16dp"
                     android:text="Biển báo trong các bài thi bằng lái"
-                    android:textColor="#000000"
+                    android:textColor="#ccc7cd"
                     android:backgroundTint="#4CAF50"
                     android:textSize="18sp"
                     android:textStyle="bold"
@@ -390,7 +392,7 @@
             android:id="@+id/user_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Do Ba Duy\nOnline"
+            android:text=" User\nOnline"
             android:textColor="#333333"
             android:layout_marginStart="8dp" />
     </LinearLayout>
