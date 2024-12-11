@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.speech.tts.TextToSpeech
+import android.speech.tts.UtteranceProgressListener
 import android.util.Log
 import android.view.View
 import android.view.WindowInsets
@@ -58,6 +59,7 @@ class MainActivity : AppCompatActivity(), Detector.DetectorListener {
     private val scrollInterval = 10L // Thực hiện cuộn sau mỗi 10ms
     private lateinit var queue: Queue<String> // Hàng đợi chứa tên các biển báo
     private lateinit var tts: TextToSpeech // Text-to-Speech instance
+    private var isSpeaking = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,6 +73,28 @@ class MainActivity : AppCompatActivity(), Detector.DetectorListener {
         tts = TextToSpeech(this, TextToSpeech.OnInitListener { status ->
             if (status == TextToSpeech.SUCCESS) {
                 val langResult = tts.setLanguage(Locale("vi", "VN"))
+            }
+        })
+
+        // Đặt listener cho TextToSpeech
+        tts.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
+            override fun onStart(utteranceId: String?) {
+                // Bắt đầu đọc
+            }
+
+            override fun onDone(utteranceId: String?) {
+                // Khi đọc xong, kiểm tra hàng đợi và đọc nhãn tiếp theo nếu có
+                isSpeaking = false
+                if (queue.isNotEmpty()) {
+                    val nextLabel = queue.poll()
+                    isSpeaking = true
+                    tts.speak(nextLabel, TextToSpeech.QUEUE_FLUSH, null, "utteranceId")
+                }
+            }
+
+            override fun onError(utteranceId: String?) {
+                // Xử lý lỗi nếu có
+                isSpeaking = false
             }
         })
         // Make the app fullscreen
@@ -336,6 +360,7 @@ class MainActivity : AppCompatActivity(), Detector.DetectorListener {
 //    }
 override fun onDetect(boundingBoxes: List<BoundingBox>, inferenceTime: Long) {
     runOnUiThread {
+        if (isSpeaking) return@runOnUiThread // Nếu đang đọc, không nhận diện thêm
         // Thêm tên biển báo vào hàng đợi
         for (boundingBox in boundingBoxes) {
             var label = boundingBox.clsName // Lấy nhãn của biển báo
@@ -423,9 +448,9 @@ override fun onDetect(boundingBoxes: List<BoundingBox>, inferenceTime: Long) {
 
 
         // Xử lý hàng đợi và phát âm thanh
-        if (queue.isNotEmpty()) {
+        if (queue.isNotEmpty() && !tts.isSpeaking) {
             val detectedLabel = queue.poll() // Lấy tên biển báo từ hàng đợi
-            tts.speak(detectedLabel, TextToSpeech.QUEUE_FLUSH, null, null)
+            tts.speak(detectedLabel, TextToSpeech.QUEUE_FLUSH, null, "utteranceId")
         }
     }
 }
