@@ -32,7 +32,7 @@ class TrafficSignAdapter(
         holder.name.text = trafficSign.name       // Hiển thị tên biển báo
 
         Glide.with(holder.image.context)
-            .load(trafficSign.imagePath)         // Tải hình ảnh từ URL
+            .load(trafficSign.path)         // Tải hình ảnh từ URL
             .into(holder.image)
 
         // Gọi callback khi nhấn vào item

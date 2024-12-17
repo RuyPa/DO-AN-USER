@@ -339,7 +339,7 @@ class DetectImage : AppCompatActivity(), Detector.DetectorListener {
         signName.text = trafficSign.name
         signDescription.text = trafficSign.description
         Glide.with(this)
-            .load(trafficSign.imagePath)
+            .load(trafficSign.path)
             .into(signImage)
 
         // Tạo AlertDialog với layout tùy chỉnh
