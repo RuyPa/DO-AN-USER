@@ -462,16 +462,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.View
 import android.widget.Button
 import android.widget.HorizontalScrollView
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.surendramaran.yolov8tflite.databinding.ActivityMainBinding
+import com.surendramaran.yolov8tflite.model.SessionManager
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
     private lateinit var horizontalScrollView: HorizontalScrollView
     private lateinit var categoryLayout: LinearLayout
     private val scrollHandler = Handler(Looper.getMainLooper())
@@ -479,6 +480,9 @@ class MainActivity : AppCompatActivity() {
     private val totalScrollDistance = 300 // Tổng khoảng cách cần cuộn (300 pixel)
     private val scrollStep = 5 // Cuộn 5 pixel mỗi bước
     private val scrollInterval = 10L // Thực hiện cuộn sau mỗi 10ms
+    private lateinit var userInfo: TextView
+    private lateinit var cartIcon: ImageView
+    private lateinit var btnLogout: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -496,9 +500,35 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, DetectImage::class.java)
             startActivity(intent)
         }
+        userInfo = findViewById(R.id.user_info)
 
+        // Nhận dữ liệu từ Intent
+        val userName = intent.getStringExtra("USER_NAME") ?: "Guest"
 
+        // Hiển thị thông tin người dùng
+        userInfo.text = "User: $userName\nOnline"
 
+        cartIcon = findViewById(R.id.cart_icon)
+        btnLogout = findViewById(R.id.btn_logout)
+
+        // Hiển thị nút Logout khi nhấn vào cartIcon
+        cartIcon.setOnClickListener {
+            if (btnLogout.visibility == View.GONE) {
+                btnLogout.visibility = View.VISIBLE
+            } else {
+                btnLogout.visibility = View.GONE
+            }
+        }
+
+        btnLogout.setOnClickListener {
+            // Xóa token hoặc trạng thái đăng nhập
+            SessionManager.clearToken()
+
+            // Chuyển về LoginActivity
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish() // Đóng MainActivity
+        }
         // Xử lý nút camera
         val detectButton = findViewById<com.google.android.material.floatingactionbutton.FloatingActionButton>(R.id.buttonDetect)
         detectButton.setOnClickListener {
@@ -510,8 +540,39 @@ class MainActivity : AppCompatActivity() {
         val bienBaoCamLayout = findViewById<LinearLayout>(R.id.bien_bao_cam_linear)
         bienBaoCamLayout.setOnClickListener {
             val intent = Intent(this, TrafficSignActivity::class.java)
+            intent.putExtra("CATEGORY_ID", 1) // Truyền categoryId = 1
             startActivity(intent)
         }
+
+        val bienCanhBaoLayout = findViewById<LinearLayout>(R.id.biencanhbao_linear)
+        bienCanhBaoLayout.setOnClickListener {
+            val intent = Intent(this, TrafficSignActivity::class.java)
+            intent.putExtra("CATEGORY_ID", 2) // Truyền categoryId = 1
+            startActivity(intent)
+        }
+
+        val bienHieuLenhLayout = findViewById<LinearLayout>(R.id.bien_hieulenh_linear)
+        bienHieuLenhLayout.setOnClickListener {
+            val intent = Intent(this, TrafficSignActivity::class.java)
+            intent.putExtra("CATEGORY_ID", 4) // Truyền categoryId = 1
+            startActivity(intent)
+        }
+
+        val bienPhuLayout = findViewById<LinearLayout>(R.id.bien_phu_linear)
+        bienPhuLayout.setOnClickListener {
+            val intent = Intent(this, TrafficSignActivity::class.java)
+            intent.putExtra("CATEGORY_ID", 3) // Truyền categoryId = 1
+            startActivity(intent)
+        }
+
+        val bienChiDanLayout = findViewById<LinearLayout>(R.id.bien_chidan_linear)
+        bienChiDanLayout.setOnClickListener {
+            val intent = Intent(this, TrafficSignActivity::class.java)
+            intent.putExtra("CATEGORY_ID", 5) // Truyền categoryId = 1
+            startActivity(intent)
+        }
+
+
     }
 
     private fun startInfiniteScroll() {

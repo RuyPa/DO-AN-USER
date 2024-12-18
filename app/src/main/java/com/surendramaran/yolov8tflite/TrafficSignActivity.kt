@@ -317,6 +317,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.HorizontalScrollView
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -330,6 +331,7 @@ import com.surendramaran.yolov8tflite.model.TrafficSign
 import com.surendramaran.yolov8tflite.adapter.TrafficSignAdapter
 import com.surendramaran.yolov8tflite.model.ApiResponse
 import com.surendramaran.yolov8tflite.api.RetrofitClient
+import com.surendramaran.yolov8tflite.model.SessionManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -339,6 +341,8 @@ class TrafficSignActivity : AppCompatActivity() {
     private lateinit var trafficSignAdapter: TrafficSignAdapter
 
     private lateinit var btnMainDishes: Button
+    private lateinit var btnSupplementary : Button
+    private lateinit var btnCommand : Button
     private lateinit var btnSalad: Button
     private lateinit var btnDrinks: Button
     private lateinit var backIcon: ImageView // Back icon
@@ -363,13 +367,59 @@ class TrafficSignActivity : AppCompatActivity() {
         btnSalad = findViewById(R.id.btn_salad)
         btnDrinks = findViewById(R.id.btn_drinks)
         backIcon = findViewById(R.id.back_icon)
+        btnSupplementary = findViewById(R.id.btn_supplementary)
+        btnCommand = findViewById(R.id.btn_command)
 
         // Set up back icon click listener
         backIcon.setOnClickListener {
             finish()  // Go back to previous screen
         }
 
-        highlightSelectedButton(btnMainDishes)  // Highlight default button
+        val horizontalScrollView = findViewById<HorizontalScrollView>(R.id.category_scroll)
+
+        // Get categoryId from Intent
+        val categoryId = intent.getIntExtra("CATEGORY_ID", 1) // Default to 1 if not provided
+
+        // Fetch signs and highlight button based on categoryId
+        when (categoryId) {
+            1 -> {
+                fetchTrafficSigns(categoryId)
+                highlightSelectedButton(btnMainDishes)
+                horizontalScrollView.post {
+                    horizontalScrollView.smoothScrollTo(btnMainDishes.left, 0)
+                }
+            }
+            2 -> {
+                fetchTrafficSigns(categoryId)
+                highlightSelectedButton(btnDrinks)
+                horizontalScrollView.post {
+                    horizontalScrollView.smoothScrollTo(btnDrinks.left, 0)
+                }
+            }
+            3 -> {
+                fetchTrafficSigns(categoryId)
+                highlightSelectedButton(btnSupplementary)
+                horizontalScrollView.post {
+                    horizontalScrollView.smoothScrollTo(btnSupplementary.left, 0)
+                }
+            }
+            4 -> {
+                fetchTrafficSigns(categoryId)
+                highlightSelectedButton(btnCommand)
+                horizontalScrollView.post {
+                    horizontalScrollView.smoothScrollTo(btnCommand.left, 0)
+                }
+            }
+            5 -> {
+                fetchTrafficSigns(categoryId)
+                highlightSelectedButton(btnSalad)
+                horizontalScrollView.post {
+                    horizontalScrollView.smoothScrollTo(btnSalad.left, 0)
+                }
+            }
+        }
+
+//        highlightSelectedButton(btnMainDishes)  // Highlight default button
 
         // Set up category button click listeners
         btnMainDishes.setOnClickListener {
@@ -378,13 +428,23 @@ class TrafficSignActivity : AppCompatActivity() {
         }
 
         btnSalad.setOnClickListener {
-            fetchTrafficSigns(categoryId = 2)  // Fetch guide signs
+            fetchTrafficSigns(categoryId = 5)  // Fetch guide signs
             highlightSelectedButton(btnSalad)
         }
 
         btnDrinks.setOnClickListener {
-            fetchTrafficSigns(categoryId = 3)  // Fetch warning signs
+            fetchTrafficSigns(categoryId = 2)  // Fetch warning signs
             highlightSelectedButton(btnDrinks)
+        }
+
+        btnSupplementary.setOnClickListener {
+            fetchTrafficSigns(categoryId = 3)  // Fetch warning signs
+            highlightSelectedButton(btnSupplementary)
+        }
+
+        btnCommand.setOnClickListener {
+            fetchTrafficSigns(categoryId = 4)  // Fetch warning signs
+            highlightSelectedButton(btnCommand)
         }
     }
 
@@ -438,7 +498,7 @@ class TrafficSignActivity : AppCompatActivity() {
 
     // Fetch traffic signs from API based on category ID
     private fun fetchTrafficSigns(categoryId: Int) {
-        val token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTczNDQ0NDMzOCwianRpIjoiMDRiYTNmOWYtNzE4Ny00MDA3LTgyMDAtMzJiZjY1Y2JjNGNhIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6eyJpZCI6Miwicm9sZSI6ImFkbWluIiwiZW1haWwiOiJkdXlkb2JhMTIxMDAyQGdtYWlsLmNvbSJ9LCJuYmYiOjE3MzQ0NDQzMzgsImV4cCI6MTczNDQ4NzUzOH0.bk-uZYxznV1PwLazMfKWDxYZDO-kmjOw-pEGcmUv1Sk" // Replace with the actual token
+        val token = "Bearer ${SessionManager.getToken()}" // Lấy token từ SessionManager
 
         RetrofitClient.apiService.searchTrafficSigns(
             token = token,
@@ -471,7 +531,8 @@ class TrafficSignActivity : AppCompatActivity() {
         btnMainDishes.setBackgroundColor(getColor(R.color.default_button_color))
         btnSalad.setBackgroundColor(getColor(R.color.default_button_color))
         btnDrinks.setBackgroundColor(getColor(R.color.default_button_color))
-
+        btnSupplementary.setBackgroundColor(getColor(R.color.default_button_color))
+        btnCommand.setBackgroundColor(getColor(R.color.default_button_color))
         // Set highlighted color for the selected button
         selectedButton.setBackgroundColor(getColor(R.color.selected_button_color))
     }
