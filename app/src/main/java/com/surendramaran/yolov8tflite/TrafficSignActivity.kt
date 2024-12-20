@@ -314,11 +314,17 @@ package com.surendramaran.yolov8tflite
 
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.widget.AdapterView
 import android.widget.Button
+import android.widget.EditText
 import android.widget.HorizontalScrollView
+import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -332,6 +338,11 @@ import com.surendramaran.yolov8tflite.adapter.TrafficSignAdapter
 import com.surendramaran.yolov8tflite.model.ApiResponse
 import com.surendramaran.yolov8tflite.api.RetrofitClient
 import com.surendramaran.yolov8tflite.model.SessionManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -346,6 +357,14 @@ class TrafficSignActivity : AppCompatActivity() {
     private lateinit var btnSalad: Button
     private lateinit var btnDrinks: Button
     private lateinit var backIcon: ImageView // Back icon
+    private lateinit var etSearch: EditText
+    private var currentPage = 1       // Trang hiện tại
+    private var totalPages = 1        // Tổng số trang
+    private var itemsPerPage = 10
+    private var currentCategoryId = 1 // Lưu category hiện tại
+    private var currentKeyword: String? = null  // Lưu từ khóa tìm kiếm hiện tại
+    private lateinit var itemsPerPageSpinner: Spinner
+
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -375,10 +394,64 @@ class TrafficSignActivity : AppCompatActivity() {
             finish()  // Go back to previous screen
         }
 
+
+        etSearch = findViewById(R.id.searchEditText)
+
+
+        val categoryId = intent.getIntExtra("CATEGORY_ID", 1) // Default to 1 if not provided
+        currentCategoryId = categoryId
+
+
+
+
+        etSearch.addTextChangedListener(object : TextWatcher {
+            private var searchJob: Job? = null
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                searchJob?.cancel()
+                searchJob = CoroutineScope(Dispatchers.Main).launch {
+                    delay(300)
+                    s?.let {
+                        currentKeyword = if (it.isNotEmpty()) it.toString().trim() else null
+                        currentPage = 1 // Reset page when search changes
+                        fetchTrafficSigns(currentCategoryId, currentKeyword)
+                    }
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
+        itemsPerPageSpinner = findViewById(R.id.itemsPerPageSpinner)
+        itemsPerPageSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parentView: AdapterView<*>, view: View?, position: Int, id: Long) {
+                val selectedItem = parentView.getItemAtPosition(position).toString().toInt()
+                itemsPerPage = selectedItem // Update the items per page
+                currentPage = 1  // Reset to first page when changing items per page
+                fetchTrafficSigns(currentCategoryId, currentKeyword)  // Fetch signs with the new page size
+            }
+
+            override fun onNothingSelected(parentView: AdapterView<*>) {}
+        }
+        findViewById<ImageButton>(R.id.btnPrevious).setOnClickListener {
+            if (currentPage > 1) {
+                currentPage--
+                fetchTrafficSigns(categoryId, currentKeyword)
+            }
+        }
+
+        findViewById<ImageButton>(R.id.btnNext).setOnClickListener {
+            if (currentPage < totalPages) {
+                currentPage++  // Tăng trang hiện tại
+                fetchTrafficSigns(categoryId, currentKeyword)  // Gọi lại API với trang mới
+            }
+        }
+
         val horizontalScrollView = findViewById<HorizontalScrollView>(R.id.category_scroll)
 
         // Get categoryId from Intent
-        val categoryId = intent.getIntExtra("CATEGORY_ID", 1) // Default to 1 if not provided
 
         // Fetch signs and highlight button based on categoryId
         when (categoryId) {
@@ -419,32 +492,52 @@ class TrafficSignActivity : AppCompatActivity() {
             }
         }
 
+
 //        highlightSelectedButton(btnMainDishes)  // Highlight default button
 
         // Set up category button click listeners
         btnMainDishes.setOnClickListener {
             fetchTrafficSigns(categoryId = 1)  // Fetch prohibited signs
             highlightSelectedButton(btnMainDishes)
+            changeCategory(1)
+
         }
 
         btnSalad.setOnClickListener {
             fetchTrafficSigns(categoryId = 5)  // Fetch guide signs
             highlightSelectedButton(btnSalad)
+            changeCategory(5)
+
         }
 
         btnDrinks.setOnClickListener {
             fetchTrafficSigns(categoryId = 2)  // Fetch warning signs
             highlightSelectedButton(btnDrinks)
+            changeCategory(2)
+
         }
 
         btnSupplementary.setOnClickListener {
             fetchTrafficSigns(categoryId = 3)  // Fetch warning signs
             highlightSelectedButton(btnSupplementary)
+            changeCategory(3)
+
         }
 
         btnCommand.setOnClickListener {
             fetchTrafficSigns(categoryId = 4)  // Fetch warning signs
             highlightSelectedButton(btnCommand)
+            changeCategory(4)
+
+        }
+    }
+
+    private fun changeCategory(categoryId: Int) {
+        if (currentCategoryId != categoryId) {
+            currentCategoryId = categoryId
+            currentPage = 1 // Reset page to 1 when category changes
+            currentKeyword = null // Reset search keyword when category changes
+            fetchTrafficSigns(currentCategoryId) // Fetch signs for the new category
         }
     }
 
@@ -496,22 +589,26 @@ class TrafficSignActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    // Fetch traffic signs from API based on category ID
-    private fun fetchTrafficSigns(categoryId: Int) {
-        val token = "Bearer ${SessionManager.getToken()}" // Lấy token từ SessionManager
+    private fun fetchTrafficSigns(categoryId: Int, keyword: String? = null) {
+        val token = "Bearer ${SessionManager.getToken()}"
 
         RetrofitClient.apiService.searchTrafficSigns(
             token = token,
-            page = 1,
-            pageSize = 12,
+            page = currentPage,
+            keyword = keyword,
+            pageSize = itemsPerPage,
             categoryId = categoryId
         ).enqueue(object : Callback<ApiResponse> {
             override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
                 if (response.isSuccessful) {
-                    response.body()?.data?.let { trafficSigns ->
-                        // Log the size of the list (you can remove this in production)
-                        Log.d("TrafficSignActivity", "Fetched ${trafficSigns.size} traffic signs.")
-                        loadTrafficSignList(trafficSigns) // Update adapter with fetched data
+                    response.body()?.let { apiResponse ->
+                        val pagination = apiResponse.pagination
+                        currentPage = pagination.current_page
+                        totalPages = pagination.total_pages
+
+                        val trafficSigns = apiResponse.data
+                        loadTrafficSignList(trafficSigns)
+                        updatePaginationInfo()
                     }
                 } else {
                     Toast.makeText(this@TrafficSignActivity, "Error: ${response.code()}", Toast.LENGTH_SHORT).show()
@@ -523,6 +620,44 @@ class TrafficSignActivity : AppCompatActivity() {
             }
         })
     }
+
+
+
+    private fun updatePaginationInfo() {
+        val pageInfoText = "Page $currentPage / $totalPages"
+        findViewById<TextView>(R.id.pageInfo).text = pageInfoText
+        findViewById<ImageButton>(R.id.btnPrevious).isEnabled = currentPage > 1
+        findViewById<ImageButton>(R.id.btnNext).isEnabled = currentPage < totalPages
+    }
+
+    // Fetch traffic signs from API based on category ID
+//    private fun fetchTrafficSigns(categoryId: Int, keyword: String? = null) {
+//        val token = "Bearer ${SessionManager.getToken()}" // Lấy token từ SessionManager
+//
+//        RetrofitClient.apiService.searchTrafficSigns(
+//            token = token,
+//            page = 1,
+//            keyword = keyword, // Thêm keyword vào đây
+//            pageSize = 12,
+//            categoryId = categoryId
+//        ).enqueue(object : Callback<ApiResponse> {
+//            override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
+//                if (response.isSuccessful) {
+//                    response.body()?.data?.let { trafficSigns ->
+//                        Log.d("TrafficSignActivity", "Fetched ${trafficSigns.size} traffic signs.")
+//                        loadTrafficSignList(trafficSigns)
+//                    }
+//                } else {
+//                    Toast.makeText(this@TrafficSignActivity, "Error: ${response.code()}", Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+//                Toast.makeText(this@TrafficSignActivity, "API call failed: ${t.message}", Toast.LENGTH_SHORT).show()
+//            }
+//        })
+//    }
+
 
     // Highlight the selected button (used for category buttons)
     @RequiresApi(Build.VERSION_CODES.M)

@@ -16,6 +16,7 @@ interface ApiService {
     fun searchTrafficSigns(
         @Header("Authorization") token: String,
         @Query("page") page: Int,
+        @Query("keyword") keyword: String?,
         @Query("page_size") pageSize: Int,
         @Query("category_id") categoryId: Int // Fetch by categoryId
     ): Call<ApiResponse>

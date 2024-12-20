@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Traffic Sign</string>
+
+    <string-array name="items_per_page_options">
+        <item>10</item>
+        <item>20</item>
+        <item>30</item>
+        <item>50</item>
+    </string-array>
+
 </resources>
